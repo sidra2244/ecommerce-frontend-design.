@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>E‑Commerce · Product listing (unified header/footer)</title>
+<style>
+/* ===== RESET & BASE ===== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', system-ui, -apple-system, sans-serif; background: #f7f7f8; color: #1c1c1c; font-size: 14px; line-height: 1.5; }
+a { text-decoration: none; color: inherit; }
+ul { list-style: none; }
+input, select, button { font-family: inherit; font-size: inherit; }
+img { max-width: 100%; height: auto; display: block; }
+
+/* ===== HEADER (exactly from reference) ===== */
+.header{background:#fff;border-bottom:1px solid #e4e7eb;}
+.header-inner{max-width:1200px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;}
+.logo{display:flex;align-items:center;gap:8px;cursor:pointer;}
+.logo-icon{width:32px;height:32px;background:#127fff;border-radius:6px;display:flex;align-items:center;justify-content:center;}
+.logo-icon svg{width:18px;height:18px;fill:#fff;}
+.logo-text{font-size:20px;font-weight:700;color:#127fff;}
+.header-icons{display:flex;align-items:center;gap:20px;}
+.header-icon-btn{display:flex;flex-direction:column;align-items:center;background:none;border:none;color:#6b7280;cursor:pointer;font-size:11px;gap:2px;}
+.header-icon-btn svg{width:20px;height:20px;}
+.header-icon-btn:hover{color:#127fff;}
+/* Search Bar */
+.header-search{
+  flex:1;
+  max-width:600px;
+  margin:0 40px;
+  display:flex;
+  border:2px solid #127fff;
+  border-radius:8px;
+  overflow:hidden;
+  background:#fff;
+}
+.header-search input{
+  flex:1;
+  padding:10px 14px;
+  border:none;
+  outline:none;
+  font-size:14px;
+}
+.header-search select{
+  border:none;
+  background:#f3f4f6;
+  padding:0 12px;
+  font-size:14px;
+  outline:none;
+  border-left:1px solid #e5e7eb;
+}
+.header-search button{
+  background:#127fff;
+  color:#fff;
+  border:none;
+  padding:0 22px;
+  font-size:14px;
+  cursor:pointer;
+  transition:0.2s;
+}
+.header-search button:hover{ background:#0f6ae6; }
+
+/* ===== NAV (flag image, exactly as given) ===== */
+ .nav { 
+            background: #fff; 
+            border-bottom: 1px solid #e4e7eb; 
+            position: relative;
+        }
+        .nav-inner { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 8px 16px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            flex-wrap: wrap; 
+            gap: 8px 16px; 
+        }
+        .nav-links { 
+            display: flex; 
+            align-items: center; 
+            gap: 24px; 
+            flex-wrap: wrap; 
+        }
+        .nav-links a, .nav-links button { 
+            font-size: 14px; 
+            color: #1c1c1c; 
+            background: none; 
+            border: none; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            gap: 4px; 
+            white-space: nowrap; 
+        }
+        .nav-links a:hover { 
+            color: #127fff; 
+        }
+        .nav-right { 
+            display: flex; 
+            align-items: center; 
+            gap: 16px; 
+            flex-wrap: wrap; 
+        }
+        .nav-right a { 
+            font-size: 14px; 
+            color: #1c1c1c; 
+            display: flex; 
+            align-items: center; 
+            gap: 6px; 
+            white-space: nowrap; 
+            text-decoration: none;
+            position: relative;
+        }
+        .flag-img { 
+            width: 20px; 
+            height: 15px; 
+            object-fit: cover; 
+            border-radius: 2px; 
+            display: inline-block; 
+        }
+
+        /* dropdown container */
+        .dropdown {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        /* dropdown menu */
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            background: white;
+            border: 1px solid #e4e7eb;
+            border-radius: 8px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            min-width: 190px;
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+            padding: 8px 0;
+            list-style: none;
+        }
+        .dropdown-menu.left-align {
+            left: 0;
+            right: auto;
+        }
+        .dropdown-menu.show {
+            display: flex;
+        }
+        .dropdown-menu li {
+            width: 100%;
+        }
+        .dropdown-menu a, .dropdown-menu button {
+            font-size: 13px;
+            padding: 8px 16px;
+            text-decoration: none;
+            color: #1c1c1c;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.1s;
+        }
+        .dropdown-menu a:hover, .dropdown-menu button:hover {
+            background-color: #f5f7fa;
+            color: #127fff;
+        }
+        /* selected item indicator */
+        .dropdown-menu a.selected, .dropdown-menu button.selected {
+            background-color: #eef4ff;
+            color: #127fff;
+            font-weight: 500;
+            position: relative;
+        }
+        .dropdown-menu a.selected::after {
+            content: "✓";
+            position: absolute;
+            right: 16px;
+            color: #127fff;
+            font-weight: 600;
+        }
+        .dropdown-menu .flag-img {
+            width: 18px;
+            height: 13px;
+        }
+        /* SVG icon size */
+        .dropdown-menu svg {
+            width: 16px;
+            height: 16px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        .arrow-down {
+            font-size: 14px;
+            line-height: 1;
+            margin-left: 2px;
+        }
+
+        /* help menu specific (left aligned) */
+        .nav-links .dropdown .dropdown-menu {
+            left: 0;
+            right: auto;
+        }
+
+        @media screen and (max-width: 600px) {
+            .nav-inner { 
+                flex-direction: column; 
+                align-items: flex-start; 
+            }
+            .nav-right { 
+                align-self: flex-end; 
+            }
+            .dropdown-menu {
+                right: 0;
+                left: auto;
+            }
+            .nav-links .dropdown .dropdown-menu {
+                left: 0;
+                right: auto;
+            }
+        }
+
+/* ===== BREADCRUMB ===== */
+.breadcrumb { max-width: 1200px; margin: 0 auto; padding: 16px; font-size: 13px; color: #6b7280; }
+
+/* ===== MAIN (two‑column) ===== */
+.main-content { max-width: 1200px; margin: 0 auto; padding: 0 16px 32px; display: flex; gap: 24px; }
+
+/* ===== SIDEBAR (collapsible, styled from reference) ===== */
+.sidebar { width: 220px; flex-shrink: 0; }
+.filter-section { margin-bottom: 16px; border-bottom: 1px solid #eef2f6; padding-bottom: 12px; }
+.filter-title { font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; cursor: pointer; user-select: none; }
+.filter-title svg { width: 16px; height: 16px; color: #6b7280; transition: transform 0.2s; }
+.filter-title.open svg { transform: rotate(180deg); }
+.filter-content { display: block; }
+.filter-content.hidden { display: none; }
+.filter-section ul li { padding: 3px 0; font-size: 14px; }
+.filter-section .see-all { font-size: 13px; color: #127fff; cursor: pointer; display: inline-block; margin-top: 4px; }
+.filter-checkbox { display: flex; flex-direction: column; gap: 6px; }
+.filter-checkbox label { display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; }
+.filter-checkbox input[type="checkbox"], .filter-checkbox input[type="radio"] { width: 16px; height: 16px; accent-color: #127fff; }
+.price-inputs { display: flex; gap: 8px; align-items: center; margin-top: 8px; flex-wrap: wrap; }
+.price-inputs input { width: 70px; padding: 4px 8px; border: 1px solid #e4e7eb; border-radius: 4px; outline: none; }
+.price-inputs button { padding: 4px 12px; background: #127fff; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
+.stars-filter { display: flex; flex-direction: column; gap: 4px; }
+.stars-filter label { display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 14px; }
+.stars-filter .star { color: #f59e0b; }
+
+/* ===== PRODUCT AREA ===== */
+.product-area { flex: 1; min-width: 280px; }
+.top-bar { display: flex; align-items: center; justify-content: space-between; background: #fff; border: 1px solid #e4e7eb; border-radius: 8px; padding: 12px 16px; flex-wrap: wrap; gap: 10px; }
+.top-bar p { font-size: 14px; }
+.top-bar p strong { font-weight: 600; }
+.top-bar-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.verified-label { display: flex; align-items: center; gap: 6px; font-size: 14px; color: #6b7280; white-space: nowrap; }
+.verified-label input { width: 16px; height: 16px; accent-color: #127fff; }
+.sort-select { padding: 6px 12px; border: 1px solid #e4e7eb; border-radius: 6px; outline: none; background: #fff; }
+.view-toggle { display: flex; overflow: hidden; border: 1px solid #e4e7eb; border-radius: 6px; flex-shrink: 0; }
+.view-toggle button { padding: 6px; background: #fff; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.view-toggle button.active { background: #f0f5ff; }
+.view-toggle button svg { width: 16px; height: 16px; color: #6b7280; }
+.view-toggle button.active svg { color: #127fff; }
+
+.filter-tags { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 12px; }
+.filter-tag { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border: 1px solid #127fff; border-radius: 6px; font-size: 13px; color: #127fff; background: #fff; cursor: pointer; }
+.filter-tag svg { width: 14px; height: 14px; }
+.clear-all { font-size: 13px; color: #127fff; cursor: pointer; background: none; border: none; white-space: nowrap; }
+
+/* Product grid / list */
+.product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 16px; }
+.product-card { background: #fff; border: 1px solid #e4e7eb; border-radius: 8px; padding: 16px; transition: box-shadow 0.2s; display: flex; flex-direction: column; }
+.product-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+.product-card-image { width: 100%; height: 180px; display: flex; align-items: center; justify-content: center; }
+.product-card-image img { max-height: 100%; max-width: 100%; object-fit: contain; }
+.product-info { margin-top: 12px; flex: 1; }
+.price-row { display: flex; align-items: center; justify-content: space-between; }
+.price { font-size: 16px; font-weight: 600; }
+.old-price { font-size: 13px; color: #9ca3af; text-decoration: line-through; margin-left: 8px; }
+.heart-btn { background: none; border: none; cursor: pointer; color: #9ca3af; transition: color 0.2s; flex-shrink: 0; }
+.heart-btn:hover, .heart-btn.liked { color: #ef4444; }
+.heart-btn svg { width: 20px; height: 20px; fill: transparent; }
+.heart-btn.liked svg { fill: #ef4444; stroke: #ef4444; }
+.rating-row { display: flex; align-items: center; gap: 4px; margin-top: 4px; }
+.stars { color: #f59e0b; font-size: 14px; }
+.rating-score { font-size: 13px; color: #f59e0b; }
+.product-title { margin-top: 4px; font-size: 13px; color: #6b7280; line-height: 1.4; word-break: break-word; }
+
+.pagination { display: flex; align-items: center; justify-content: flex-end; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
+.show-count { display: flex; align-items: center; gap: 4px; padding: 6px 12px; border: 1px solid #e4e7eb; border-radius: 6px; font-size: 14px; color: #6b7280; background: #fff; cursor: pointer; }
+.show-count svg { width: 12px; height: 12px; }
+.page-buttons { display: flex; overflow: hidden; border: 1px solid #e4e7eb; border-radius: 6px; flex-wrap: wrap; }
+.page-buttons button { padding: 6px 12px; background: #fff; border: none; font-size: 14px; color: #6b7280; cursor: pointer; }
+.page-buttons button:hover { background: #f7f7f8; }
+.page-buttons button.active-page { color: #1c1c1c; font-weight: 500; }
+.page-buttons button svg { width: 16px; height: 16px; }
+
+/* ===== NEWSLETTER ===== */
+.newsletter { background: #e9ecf0; padding: 40px 16px; text-align: center; }
+.newsletter h2 { font-size: 20px; font-weight: 600; }
+.newsletter p { font-size: 14px; color: #6b7280; margin-top: 4px; }
+.newsletter-form { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+.newsletter-input { display: flex; align-items: center; border: 1px solid #e4e7eb; border-radius: 8px; background: #fff; overflow: hidden; }
+.newsletter-input svg { width: 16px; height: 16px; margin-left: 12px; color: #9ca3af; }
+.newsletter-input input { padding: 8px 12px; border: none; outline: none; min-width: 200px; }
+.newsletter-form button { padding: 8px 20px; background: #127fff; color: #fff; border: none; border-radius: 8px; font-weight: 500; cursor: pointer; }
+
+/* ===== FOOTER (exactly from reference) ===== */
+.footer{background:#fff;border-top:1px solid #e4e7eb;margin-top:40px;}
+.footer-inner{max-width:1200px;margin:0 auto;padding:40px 16px;display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr 1fr 1fr;gap:32px;}
+.footer-brand .logo{margin-bottom:12px;}
+.footer-brand p{font-size:12px;color:#6b7280;line-height:1.6;}
+.social-icons{display:flex;gap:8px;margin-top:12px;}
+.social-icon{width:32px;height:32px;border-radius:50%;background:#e5e7eb;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s;}
+.social-icon:hover{background:#127fff;}
+.social-icon:hover svg{fill:#fff;}
+.social-icon svg{width:16px;height:16px;fill:#6b7280;}
+.footer-col h4{font-size:14px;font-weight:600;color:#1c1c1c;margin-bottom:12px;}
+.footer-col ul li{padding:3px 0;}
+.footer-col ul li a{font-size:14px;color:#6b7280;cursor:pointer;}
+.footer-col ul li a:hover{color:#127fff;}
+.app-badges{display:flex;flex-direction:column;gap:8px;}
+.app-badge{height:40px;cursor:pointer;transition:opacity .2s;}
+.app-badge:hover{opacity:.8;}
+.footer-bottom{background:#f0f1f3;border-top:1px solid #e4e7eb;}
+.footer-bottom-inner{max-width:1200px;margin:0 auto;padding:16px;display:flex;align-items:center;justify-content:space-between;font-size:14px;color:#6b7280;}
+.lang-selector{display:flex;align-items:center;gap:6px;cursor:pointer;}
+.lang-selector img{width:22px;height:16px;border-radius:2px;}
+.social-icon svg{ width:20px; height:20px; stroke:#cdced1; transition:0.2s; }
+.social-icon:hover svg{ stroke:#127fff; }
+
+@media(max-width:992px){
+  .main-content{flex-direction:column;}
+  .sidebar{width:100%;}
+  .footer-inner{grid-template-columns:repeat(3,1fr);}
+}
+@media(max-width:640px){
+  .header-inner{flex-wrap:wrap;gap:12px;}
+  .footer-inner{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER (reference) ===== -->
+<header class="header">
+  <div class="header-inner">
+    <a href="#" class="logo">
+      <div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM9 8V6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9z"/></svg></div>
+      <span class="logo-text">Brand</span>
+    </a>
+    <!-- Search bar with category select (preserved from original product listing) -->
+    <div class="header-search">
+      <input type="text" id="searchInput" placeholder="Search products..." />
+      <select id="searchCategory">
+        <option>All category</option>
+        <option>Mobile accessory</option>
+        <option>Electronics</option>
+        <option>Smartphones</option>
+        <option>Modern tech</option>
+      </select>
+      <button id="searchBtn">Search</button>
+    </div>
+    <div class="header-icons">
+      <button class="header-icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Profile</span></button>
+      <button class="header-icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Message</span></button>
+      <button class="header-icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg><span>Orders</span></button>
+    <button class="header-icon-btn" onclick="window.location.href='page.html'">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+  <span>My cart</span>
+</button>
+    </div>
+  </div>
+</header>
+
+<!-- ===== NAV (flag + ship to) ===== -->
+<nav class="nav">
+        <div class="nav-inner">
+            <div class="nav-links">
+                <button>☰ All category</button>
+                <a href="#">Hot offers</a>
+                <a href="#">Gift boxes</a>
+                <a href="#">Projects</a>
+                <a href="#">Menu item</a>
+
+                <!-- HELP dropdown with SVG icons (no emojis) -->
+                <div class="dropdown" id="helpDropdown">
+                    <a href="#" class="dropbtn">Help ▾</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" data-value="help-center"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Help Center</a></li>
+                        <li><a href="#" data-value="track-order"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Track order</a></li>
+                        <li><a href="#" data-value="contact"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Contact us</a></li>
+                        <li><a href="#" data-value="returns"><svg viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0 1 16.138 21H7.862a2 2 0 0 1-1.995-1.858L5 7m5 4v6m4-6v6M1 7h22M9 3h6a2 2 0 0 1 2 2v2H7V5a2 2 0 0 1 2-2z"/></svg> Returns & refunds</a></li>
+                        <li><a href="#" data-value="faq"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg> FAQ</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="nav-right">
+                <!-- ENGLISH, USD dropdown (selectable) -->
+                <div class="dropdown" id="langCurrencyDropdown">
+                    <a href="#" class="dropbtn">English, USD ▾</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" data-value="en-usd">🇺🇸 English, USD</a></li>
+                        <li><a href="#" data-value="es-eur">🇪🇸 Español, EUR</a></li>
+                        <li><a href="#" data-value="fr-eur">🇫🇷 Français, EUR</a></li>
+                        <li><a href="#" data-value="de-eur">🇩🇪 Deutsch, EUR</a></li>
+                        <li><a href="#" data-value="ja-jpy">🇯🇵 日本語, JPY</a></li>
+                        <li><a href="#" data-value="zh-cny">🇨🇳 中文, CNY</a></li>
+                    </ul>
+                </div>
+
+                <!-- SHIP TO with flag and many countries (selectable) -->
+                <div class="dropdown" id="shipToDropdown">
+                    <a href="#" class="dropbtn">
+                        <img class="flag-img" src="https://flagcdn.com/w40/de.png" alt="German flag"> 
+                        Ship to ▾
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" data-value="DE"><img class="flag-img" src="https://flagcdn.com/w40/de.png" alt="DE"> Germany (default)</a></li>
+                        <li><a href="#" data-value="US"><img class="flag-img" src="https://flagcdn.com/w40/us.png" alt="US"> United States</a></li>
+                        <li><a href="#" data-value="GB"><img class="flag-img" src="https://flagcdn.com/w40/gb.png" alt="GB"> United Kingdom</a></li>
+                        <li><a href="#" data-value="FR"><img class="flag-img" src="https://flagcdn.com/w40/fr.png" alt="FR"> France</a></li>
+                        <li><a href="#" data-value="IT"><img class="flag-img" src="https://flagcdn.com/w40/it.png" alt="IT"> Italy</a></li>
+                        <li><a href="#" data-value="ES"><img class="flag-img" src="https://flagcdn.com/w40/es.png" alt="ES"> Spain</a></li>
+                        <li><a href="#" data-value="JP"><img class="flag-img" src="https://flagcdn.com/w40/jp.png" alt="JP"> Japan</a></li>
+                        <li><a href="#" data-value="CA"><img class="flag-img" src="https://flagcdn.com/w40/ca.png" alt="CA"> Canada</a></li>
+                        <li><a href="#" data-value="AU"><img class="flag-img" src="https://flagcdn.com/w40/au.png" alt="AU"> Australia</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+<!-- ===== BREADCRUMB ===== -->
+<div class="breadcrumb">Home › Clothings › Men's wear › Summer clothing</div>
+
+<!-- ===== MAIN LAYOUT (product listing with sidebar) ===== -->
+<div class="main-content">
+  <!-- SIDEBAR (collapsible sections + filters) -->
+  <aside class="sidebar" id="sidebar">
+    <div class="filter-section">
+      <div class="filter-title open" data-target="catContent">Category <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+      <div class="filter-content" id="catContent">
+        <ul id="categoryList">
+          <li>Mobile accessory</li><li>Electronics</li><li>Smartphones</li><li>Modern tech</li>
+        </ul>
+        <a class="see-all" href="#" id="toggleCategories">See all</a>
+      </div>
+    </div>
+    <div class="filter-section">
+      <div class="filter-title open" data-target="brandsContent">Brands <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+      <div class="filter-content" id="brandsContent">
+        <div class="filter-checkbox" id="brandsList"></div>
+        <a class="see-all" href="#" id="toggleBrands">See all</a>
+      </div>
+    </div>
+    <div class="filter-section">
+      <div class="filter-title open" data-target="featuresContent">Features <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+      <div class="filter-content" id="featuresContent">
+        <div class="filter-checkbox" id="featuresList"></div>
+        <a class="see-all" href="#" id="toggleFeatures">See all</a>
+      </div>
+    </div>
+    <div class="filter-section">
+      <div class="filter-title open" data-target="priceContent">Price range <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+      <div class="filter-content" id="priceContent">
+        <div class="price-inputs">
+          <input type="number" id="minPriceInput" placeholder="Min" value="0" />
+          <span>-</span>
+          <input type="number" id="maxPriceInput" placeholder="Max" value="3000" />
+          <button id="applyPriceBtn">Apply</button>
+        </div>
+      </div>
+    </div>
+    <div class="filter-section">
+      <div class="filter-title open" data-target="conditionContent">Condition <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+      <div class="filter-content" id="conditionContent">
+        <div class="filter-checkbox" id="conditionList"></div>
+      </div>
+    </div>
+    <div class="filter-section">
+      <div class="filter-title open" data-target="ratingContent">Ratings <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+      <div class="filter-content" id="ratingContent">
+        <div class="stars-filter" id="ratingsList"></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- PRODUCT AREA (dynamic) -->
+  <div class="product-area">
+    <div class="top-bar">
+      <p><strong id="resultsCount">0</strong> items found</p>
+      <div class="top-bar-right">
+        <label class="verified-label"><input type="checkbox" id="verifiedOnly" /> Verified only</label>
+        <select class="sort-select" id="sortSelect">
+          <option value="featured">Featured</option>
+          <option value="priceLowHigh">Price: Low to high</option>
+          <option value="priceHighLow">Price: High to low</option>
+          <option value="ratingHighLow">Rating: High to low</option>
+        </select>
+        <div class="view-toggle">
+          <button class="active" id="gridViewBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></button>
+          <button id="listViewBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></button>
+        </div>
+      </div>
+    </div>
+    <!-- active filter tags (will be populated by JS) -->
+    <div class="filter-tags" id="filterTags"></div>
+    <!-- product container (grid/list) -->
+    <div id="productsContainer" class="product-grid"></div>
+    <!-- pagination -->
+    <div class="pagination">
+      <div class="show-count" id="pageSizeSelectWrap">
+        <select id="pageSizeSelect" style="border:none; background:transparent; outline:none;">
+          <option value="2">Show 2</option><option value="4">Show 4</option><option value="6" selected>Show 6</option><option value="10">Show 10</option>
+        </select>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="page-buttons" id="pageNumbers"></div>
+      <div style="display:flex; gap:4px;">
+        <button id="prevPage" class="page-btn" style="padding:6px 12px; border:1px solid #e4e7eb; background:#fff; border-radius:6px;">‹ Prev</button>
+        <button id="nextPage" class="page-btn" style="padding:6px 12px; border:1px solid #e4e7eb; background:#fff; border-radius:6px;">Next ›</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== NEWSLETTER ===== -->
+<section class="newsletter">
+  <h2>Subscribe on our newsletter</h2>
+  <p>Get daily news on upcoming offers from many suppliers all over the world</p>
+  <div class="newsletter-form">
+    <div class="newsletter-input">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      <input type="email" placeholder="Email" />
+    </div>
+    <button>Subscribe</button>
+  </div>
+</section>
+
+<!-- ===== FOOTER (exact copy from reference) ===== -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="#" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="#fff"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM9 8V6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9z"/></svg></div>
+        <span class="logo-text">Brand</span>
+      </a>
+      <p>Best information about the company gies here but now lorem ipsum is</p>
+      <div class="social-icons">
+        <a href="#" class="social-icon"><svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+        <a href="#" class="social-icon"><svg viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg></a>
+        <a href="#" class="social-icon"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+        <a href="#" class="social-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17" cy="7" r="1"/></svg></a>
+        <a href="#" class="social-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="3"/><polygon points="10 9 16 12 10 15 10 9"/></svg></a>
+      </div>
+    </div>
+    <div class="footer-col"><h4>About</h4><ul><li><a href="#">About Us</a></li><li><a href="#">Find store</a></li><li><a href="#">Categories</a></li><li><a href="#">Blogs</a></li></ul></div>
+    <div class="footer-col"><h4>Partnership</h4><ul><li><a href="#">About Us</a></li><li><a href="#">Find store</a></li><li><a href="#">Categories</a></li><li><a href="#">Blogs</a></li></ul></div>
+    <div class="footer-col"><h4>Information</h4><ul><li><a href="#">Help Center</a></li><li><a href="#">Money Refund</a></li><li><a href="#">Shipping</a></li><li><a href="#">Contact us</a></li></ul></div>
+    <div class="footer-col"><h4>For users</h4><ul><li><a href="#">Login</a></li><li><a href="#">Register</a></li><li><a href="#">Settings</a></li><li><a href="#">My Orders</a></li></ul></div>
+    <div class="footer-col"><h4>Get app</h4><div class="app-badges"><a href="#"><img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="App Store" class="app-badge"></a><a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play" class="app-badge"></a></div></div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-bottom-inner"><span>© 2023 Ecommerce.</span><span class="lang-selector"><img src="https://flagcdn.com/w40/us.png" alt="US"> English ▾</span></div>
+  </div>
+</footer>
+
+<script>
+// ===== product dataset (enriched with fields needed for filters) =====
+const PRODUCTS = [
+  { id:1, name:"Canon Camera EOS 2000, Black 10x zoom", category:"Electronics", price:998, originalPrice:1128, rating:4, orders:154, image:"images/mob.png", description:"High-quality DSLR camera.", freeShipping:true, verified:true, brand:"Samsung", features:["Metallic","8GB Ram"], condition:"Brand new", wishlisted:false },
+  { id:2, name:"GoPro HERO6 4K Action Camera", category:"Modern tech", price:699, rating:5, orders:221, image:"https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=500&q=80", description:"4K action camera.", freeShipping:true, verified:true, brand:"Apple", features:["Plastic cover","Super power"], condition:"Brand new", wishlisted:false },
+  { id:3, name:"iPhone 13 Pro Max 256GB", category:"Smartphones", price:1299, rating:5, orders:430, image:"https://images.unsplash.com/photo-1632661674596-df8be070a5c5?auto=format&fit=crop&w=500&q=80", description:"Flagship smartphone.", freeShipping:false, verified:false, brand:"Huawei", features:["Metallic","Large Memory"], condition:"Refurbished", wishlisted:false },
+  { id:4, name:"Wireless Gaming Headset Pro X", category:"Mobile accessory", price:249, originalPrice:299, rating:3, orders:92, image:"https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=500&q=80", description:"Immersive audio.", freeShipping:true, verified:true, brand:"Pocco", features:["8GB Ram","Super power"], condition:"Brand new", wishlisted:false },
+  { id:5, name:"Lenovo IdeaPad Slim 5", category:"Modern tech", price:899, rating:4, orders:176, image:"https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=500&q=80", description:"Thin laptop.", freeShipping:true, verified:false, brand:"Lenovo", features:["Plastic cover","Large Memory"], condition:"Old items", wishlisted:false },
+  { id:6, name:"Samsung Galaxy S23 Ultra", category:"Smartphones", price:1199, rating:5, orders:311, image:"https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?auto=format&fit=crop&w=500&q=80", description:"Premium Android.", freeShipping:false, verified:true, brand:"Samsung", features:["Metallic","8GB Ram","Super power"], condition:"Brand new", wishlisted:false }
+];
+
+const BRANDS = ["Samsung","Apple","Huawei","Pocco","Lenovo"];
+const FEATURES = ["Metallic","Plastic cover","8GB Ram","Super power","Large Memory"];
+const CONDITIONS = ["Any","Refurbished","Brand new","Old items"];
+const RATINGS = [5,4,3,2,1];
+
+// ---- state ----
+let state = {
+  searchQuery: "", searchCategory: "All category",
+  selectedCategory: "",
+  selectedBrands: new Set(), selectedFeatures: new Set(),
+  selectedCondition: "Any", selectedRatings: new Set(),
+  minPrice: 0, maxPrice: 3000, verifiedOnly: false,
+  sortBy: "featured", viewMode: "grid",  // default grid (as per ref)
+  page: 1, pageSize: 6,
+  showAllBrands: false, showAllFeatures: false,
+  products: JSON.parse(JSON.stringify(PRODUCTS))
+};
+
+// helpers
+const stars = (r) => "★".repeat(r) + "☆".repeat(5-r);
+
+function clampPrices() {
+  if (state.minPrice > state.maxPrice) [state.minPrice, state.maxPrice] = [state.maxPrice, state.minPrice];
+}
+ (function() {
+            // Dropdown toggle logic
+            const dropdowns = document.querySelectorAll('.dropdown');
+
+            function hideAllDropdowns(except = null) {
+                dropdowns.forEach(drop => {
+                    const menu = drop.querySelector('.dropdown-menu');
+                    if (menu && drop !== except) {
+                        menu.classList.remove('show');
+                    }
+                });
+            }
+
+            function toggleDropdown(drop) {
+                const menu = drop.querySelector('.dropdown-menu');
+                if (!menu) return;
+                if (menu.classList.contains('show')) {
+                    menu.classList.remove('show');
+                } else {
+                    hideAllDropdowns(drop);
+                    menu.classList.add('show');
+                }
+            }
+
+            // Attach click to dropbtns
+            dropdowns.forEach(drop => {
+                const btn = drop.querySelector('.dropbtn');
+                if (btn) {
+                    btn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        toggleDropdown(drop);
+                    });
+                }
+            });
+
+            // Handle selection inside dropdowns
+// Handle selection inside dropdowns
+const menuItems = document.querySelectorAll('.dropdown-menu a, .dropdown-menu button');
+menuItems.forEach(item => {
+    item.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        // Find parent dropdown menu and dropdown container
+        const parentMenu = this.closest('.dropdown-menu');
+        const dropdown = this.closest('.dropdown');
+        if (!parentMenu || !dropdown) return;
+
+        // Remove 'selected' class from all items in this menu
+        parentMenu.querySelectorAll('a, button').forEach(el => {
+            el.classList.remove('selected');
+        });
+        
+        // Add selected class to clicked item
+        this.classList.add('selected');
+
+        // Get the dropbtn (main button) within this dropdown
+        const dropbtn = dropdown.querySelector('.dropbtn');
+        
+        if (dropbtn) {
+            // For ship to dropdown: need to preserve the flag image
+            if (dropdown.id === 'shipToDropdown') {
+                // Get the flag from selected item
+                const selectedFlag = this.querySelector('.flag-img');
+                if (selectedFlag) {
+                    // Clone the flag to use in main button
+                    const newFlag = selectedFlag.cloneNode(true);
+                    
+                    // Keep the "Ship to ▾" text but update flag
+                    const shipText = document.createTextNode(' Ship to ▾');
+                    
+                    // Clear button and append new flag + text
+                    dropbtn.innerHTML = '';
+                    dropbtn.appendChild(newFlag);
+                    dropbtn.appendChild(shipText);
+                }
+            } 
+            // For language dropdown: update text with selected value
+            else if (dropdown.id === 'langCurrencyDropdown') {
+                const selectedText = this.textContent.trim();
+                if (selectedText) {
+                    dropbtn.textContent = selectedText + ' ▾';
+                }
+            }
+            // For help dropdown: update text with selected value
+            else if (dropdown.id === 'helpDropdown') {
+                const selectedText = this.textContent.trim();
+                if (selectedText) {
+                    dropbtn.textContent = selectedText + ' ▾';
+                }
+            }
+        }
+
+        // Close the dropdown after selection
+        setTimeout(() => {
+            const menu = dropdown.querySelector('.dropdown-menu');
+            if (menu) menu.classList.remove('show');
+        }, 100);
+
+        hideAllDropdowns();
+    });
+});
+
+            // Preserve default selected state (optional: pre-select first?)
+            // But we want no default selected? However to demonstrate, we set 'English, USD' as selected initially
+            const langMenu = document.querySelector('#langCurrencyDropdown .dropdown-menu');
+            if (langMenu) {
+                const firstItem = langMenu.querySelector('a[data-value="en-usd"]');
+                if (firstItem) firstItem.classList.add('selected');
+            }
+            const shipMenu = document.querySelector('#shipToDropdown .dropdown-menu');
+            if (shipMenu) {
+                const deItem = shipMenu.querySelector('a[data-value="DE"]');
+                if (deItem) deItem.classList.add('selected');
+            }
+            const helpMenu = document.querySelector('#helpDropdown .dropdown-menu');
+            if (helpMenu) {
+                // Optionally no default, or set help center as selected? we choose none.
+                // keep clean.
+            }
+        })();
+// get filtered + sorted products
+function getFiltered() {
+  return state.products.filter(p => {
+    if (state.searchQuery && !p.name.toLowerCase().includes(state.searchQuery.toLowerCase())) return false;
+    if (state.searchCategory !== "All category" && p.category !== state.searchCategory) return false;
+    if (state.selectedCategory && p.category !== state.selectedCategory) return false;
+    if (state.selectedBrands.size && !state.selectedBrands.has(p.brand)) return false;
+    if (state.selectedFeatures.size && ![...state.selectedFeatures].every(f => p.features.includes(f))) return false;
+    if (state.selectedCondition !== "Any" && p.condition !== state.selectedCondition) return false;
+    if (state.selectedRatings.size && !state.selectedRatings.has(p.rating)) return false;
+    if (p.price < state.minPrice || p.price > state.maxPrice) return false;
+    if (state.verifiedOnly && !p.verified) return false;
+    return true;
+  }).sort((a,b) => {
+    if (state.sortBy === 'priceLowHigh') return a.price - b.price;
+    if (state.sortBy === 'priceHighLow') return b.price - a.price;
+    if (state.sortBy === 'ratingHighLow') return b.rating - a.rating;
+    return 0; // featured
+  });
+}
+
+// render products inside container
+function renderProducts() {
+  const filtered = getFiltered();
+  const totalPages = Math.max(1, Math.ceil(filtered.length / state.pageSize));
+  if (state.page > totalPages) state.page = totalPages || 1;
+  const start = (state.page-1)*state.pageSize;
+  const pageData = filtered.slice(start, start+state.pageSize);
+
+  document.getElementById('resultsCount').innerText = filtered.length;
+  const container = document.getElementById('productsContainer');
+  container.className = state.viewMode === 'grid' ? 'product-grid' : 'product-list';
+  if (!pageData.length) {
+    container.innerHTML = '<div style="grid-column:1/-1; padding:40px; text-align:center;">No products found</div>';
+  } else {
+    container.innerHTML = pageData.map(p => state.viewMode === 'grid' ? `
+      <div class="product-card">
+        <div class="product-card-image"><img src="${p.image}" alt="${p.name}" loading="lazy" /></div>
+        <div class="product-info">
+          <div class="price-row">
+            <div><span class="price">$${p.price}</span>${p.originalPrice ? `<span class="old-price">$${p.originalPrice}</span>` : ''}</div>
+            <button class="heart-btn ${p.wishlisted ? 'liked' : ''}" onclick="toggleWish(${p.id})"><svg viewBox="0 0 24 24" fill="${p.wishlisted ? '#ef4444' : 'none'}" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button>
+          </div>
+          <div class="rating-row"><span class="stars">${stars(p.rating)}</span><span class="rating-score">${p.rating}.0</span></div>
+          <p class="product-title">${p.name}</p>
+        </div>
+      </div>` : `
+      <div style="display:flex; background:#fff; border:1px solid #e4e7eb; border-radius:8px; padding:12px; gap:16px;">
+        <img src="${p.image}" style="width:120px; height:120px; object-fit:cover; border-radius:6px;" />
+        <div style="flex:1">
+          <h4 style="margin:0 0 6px;">${p.name}</h4>
+          <span class="price">$${p.price}</span> ${p.originalPrice?`<span class="old-price">$${p.originalPrice}</span>`:''}
+          <div class="stars">${stars(p.rating)}</div>
+          <p style="color:#6b7280; font-size:13px;">${p.description}</p>
+        </div>
+      </div>`).join('');
+  }
+  // pagination buttons
+  renderPagination(totalPages);
+}
+
+function renderPagination(totalPages) {
+  const pageDiv = document.getElementById('pageNumbers');
+  pageDiv.innerHTML = '';
+  for (let i=1; i<=totalPages; i++) {
+    const btn = document.createElement('button');
+    btn.className = i === state.page ? 'active-page' : '';
+    btn.innerText = i;
+    btn.onclick = () => { state.page = i; renderProducts(); };
+    pageDiv.appendChild(btn);
+  }
+}
+
+// wishlist toggle
+window.toggleWish = (id) => {
+  const prod = state.products.find(p => p.id === id);
+  if (prod) prod.wishlisted = !prod.wishlisted;
+  renderProducts();
+};
+
+// filter checkbox rendering (simplified, keeps state)
+function renderFilters() {
+  const brandsList = document.getElementById('brandsList');
+  const featuresList = document.getElementById('featuresList');
+  const condList = document.getElementById('conditionList');
+  const ratingsList = document.getElementById('ratingsList');
+
+  brandsList.innerHTML = BRANDS.slice(0, state.showAllBrands ? BRANDS.length : 4).map(b => `
+    <label><input type="checkbox" data-brand="${b}" ${state.selectedBrands.has(b) ? 'checked' : ''} /> ${b}</label>
+  `).join('');
+  featuresList.innerHTML = FEATURES.slice(0, state.showAllFeatures ? FEATURES.length : 4).map(f => `
+    <label><input type="checkbox" data-feature="${f}" ${state.selectedFeatures.has(f) ? 'checked' : ''} /> ${f}</label>
+  `).join('');
+  condList.innerHTML = CONDITIONS.map(c => `
+    <label><input type="radio" name="condition" value="${c}" ${state.selectedCondition===c ? 'checked' : ''} /> ${c}</label>
+  `).join('');
+  ratingsList.innerHTML = RATINGS.map(r => `
+    <label><input type="checkbox" data-rating="${r}" ${state.selectedRatings.has(r) ? 'checked' : ''} /> <span class="star">${stars(r)}</span></label>
+  `).join('');
+
+  document.querySelectorAll('[data-brand]').forEach(cb => cb.addEventListener('change', function(e) {
+    const brand = this.dataset.brand;
+    this.checked ? state.selectedBrands.add(brand) : state.selectedBrands.delete(brand);
+    state.page = 1; renderProducts();
+  }));
+  document.querySelectorAll('[data-feature]').forEach(cb => cb.addEventListener('change', function() {
+    const feat = this.dataset.feature;
+    this.checked ? state.selectedFeatures.add(feat) : state.selectedFeatures.delete(feat);
+    state.page = 1; renderProducts();
+  }));
+  document.querySelectorAll('input[name="condition"]').forEach(r => r.addEventListener('change', function() {
+    state.selectedCondition = this.value; state.page = 1; renderProducts();
+  }));
+  document.querySelectorAll('[data-rating]').forEach(cb => cb.addEventListener('change', function() {
+    const r = Number(this.dataset.rating);
+    this.checked ? state.selectedRatings.add(r) : state.selectedRatings.delete(r);
+    state.page = 1; renderProducts();
+  }));
+}
+
+// collapsible
+document.querySelectorAll('.filter-title').forEach(title => {
+  title.addEventListener('click', function() {
+    const target = document.getElementById(this.dataset.target);
+    if (target) { target.classList.toggle('hidden'); this.classList.toggle('open'); }
+  });
+});
+
+// search / inputs
+document.getElementById('searchInput').addEventListener('input', e => { state.searchQuery = e.target.value; state.page = 1; renderProducts(); });
+document.getElementById('searchCategory').addEventListener('change', e => { state.searchCategory = e.target.value; state.page = 1; renderProducts(); });
+document.getElementById('searchBtn').addEventListener('click', () => renderProducts());
+document.getElementById('verifiedOnly').addEventListener('change', e => { state.verifiedOnly = e.target.checked; state.page = 1; renderProducts(); });
+document.getElementById('sortSelect').addEventListener('change', e => { state.sortBy = e.target.value; renderProducts(); });
+document.getElementById('gridViewBtn').addEventListener('click', function() { state.viewMode = 'grid'; document.getElementById('gridViewBtn').classList.add('active'); document.getElementById('listViewBtn').classList.remove('active'); renderProducts(); });
+document.getElementById('listViewBtn').addEventListener('click', function() { state.viewMode = 'list'; document.getElementById('listViewBtn').classList.add('active'); document.getElementById('gridViewBtn').classList.remove('active'); renderProducts(); });
+document.getElementById('pageSizeSelect').addEventListener('change', e => { state.pageSize = Number(e.target.value); state.page = 1; renderProducts(); });
+document.getElementById('prevPage').addEventListener('click', () => { if (state.page > 1) state.page--; renderProducts(); });
+document.getElementById('nextPage').addEventListener('click', () => { const total = Math.ceil(getFiltered().length / state.pageSize); if (state.page < total) state.page++; renderProducts(); });
+document.getElementById('applyPriceBtn').addEventListener('click', () => {
+  state.minPrice = Number(document.getElementById('minPriceInput').value) || 0;
+  state.maxPrice = Number(document.getElementById('maxPriceInput').value) || 3000;
+  clampPrices(); state.page = 1; renderProducts();
+});
+document.getElementById('toggleBrands').addEventListener('click', (e) => { e.preventDefault(); state.showAllBrands = !state.showAllBrands; renderFilters(); });
+document.getElementById('toggleFeatures').addEventListener('click', (e) => { e.preventDefault(); state.showAllFeatures = !state.showAllFeatures; renderFilters(); });
+
+// initialise
+renderFilters();
+renderProducts();
+</script>
+</body>
+</html>

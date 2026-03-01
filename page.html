@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Cart - Ecommerce</title>
+<style>
+/* ===== RESET ===== */
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:#f7f7f8;color:#1c1c1c;font-size:14px;line-height:1.5;}
+a{text-decoration:none;color:inherit;}
+ul{list-style:none;}
+input,select,button{font-family:inherit;font-size:inherit;}
+img{max-width:100%;display:block;}
+/* ===== HEADER ===== */
+.header{background:#fff;border-bottom:1px solid #e4e7eb;}
+.header-inner{max-width:1200px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;}
+.logo{display:flex;align-items:center;gap:8px;cursor:pointer;}
+.logo-icon{width:32px;height:32px;background:#127fff;border-radius:6px;display:flex;align-items:center;justify-content:center;}
+.logo-icon svg{width:18px;height:18px;fill:#fff;}
+.logo-text{font-size:20px;font-weight:700;color:#127fff;}
+.header-icons{display:flex;align-items:center;gap:20px;}
+.header-icon-btn{display:flex;flex-direction:column;align-items:center;background:none;border:none;color:#6b7280;cursor:pointer;font-size:11px;gap:2px;}
+.header-icon-btn svg{width:20px;height:20px;}
+.header-icon-btn:hover{color:#127fff;}
+/* ===== MAIN ===== */
+.main{max-width:1200px;margin:0 auto;padding:24px 16px 40px;}
+.page-title{font-size:22px;font-weight:700;margin-bottom:20px;}
+.cart-layout{display:flex;gap:24px;align-items:flex-start;}
+.cart-left{flex:1;}
+.cart-right{width:280px;flex-shrink:0;}
+/* Cart Items */
+.cart-items{background:#fff;border:1px solid #e4e7eb;border-radius:8px;padding:0;}
+.cart-item{display:flex;align-items:flex-start;gap:16px;padding:20px;border-bottom:1px solid #e4e7eb;}
+.cart-item:last-child{border-bottom:none;}
+.cart-item-img{width:80px;height:80px;border-radius:6px;overflow:hidden;background:#f0f1f3;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.cart-item-img img{width:100%;height:100%;object-fit:cover;}
+.cart-item-details{flex:1;}
+.cart-item-title{font-size:14px;font-weight:500;color:#1c1c1c;margin-bottom:4px;}
+.cart-item-meta{font-size:13px;color:#9ca3af;margin-bottom:2px;}
+.cart-item-actions{display:flex;gap:8px;margin-top:8px;}
+.btn-remove{padding:4px 12px;border:1px solid #ff6b6b;border-radius:4px;background:#fff;color:#ff6b6b;font-size:13px;cursor:pointer;}
+.btn-remove:hover{background:#fff0f0;}
+.btn-save{padding:4px 12px;border:1px solid #127fff;border-radius:4px;background:#fff;color:#127fff;font-size:13px;cursor:pointer;}
+.btn-save:hover{background:#f0f5ff;}
+.cart-item-right{display:flex;flex-direction:column;align-items:flex-end;gap:8px;}
+.cart-item-price{font-size:15px;font-weight:600;color:#1c1c1c;}
+.qty-select{padding:6px 10px;border:1px solid #e4e7eb;border-radius:6px;outline:none;font-size:13px;background:#fff;min-width:80px;}
+/* Cart Bottom Actions */
+.cart-bottom-actions{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;}
+.btn-back{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#127fff;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;}
+.btn-back:hover{background:#0b6fdf;}
+.btn-back svg{width:16px;height:16px;}
+.btn-remove-all{padding:8px 16px;border:1px solid #e4e7eb;border-radius:8px;background:#fff;color:#6b7280;font-size:14px;cursor:pointer;}
+.btn-remove-all:hover{background:#f7f7f8;}
+/* Coupon & Summary */
+.coupon-box{background:#fff;border:1px solid #e4e7eb;border-radius:8px;padding:16px;margin-bottom:12px;}
+.coupon-box h4{font-size:14px;font-weight:500;margin-bottom:10px;}
+.coupon-form{display:flex;gap:0;border:1px solid #e4e7eb;border-radius:6px;overflow:hidden;}
+.coupon-form input{flex:1;padding:8px 12px;border:none;outline:none;font-size:13px;}
+.coupon-form button{padding:8px 16px;background:#fff;border:none;border-left:1px solid #e4e7eb;color:#127fff;font-weight:500;cursor:pointer;font-size:13px;}
+.coupon-form button:hover{background:#f0f5ff;}
+.summary-box{background:#fff;border:1px solid #e4e7eb;border-radius:8px;padding:16px;}
+.summary-row{display:flex;justify-content:space-between;padding:6px 0;font-size:14px;color:#6b7280;}
+.summary-row.discount .val{color:#ff6b6b;}
+.summary-row.tax .val{color:#00b517;}
+.summary-row.total{border-top:1px solid #e4e7eb;margin-top:8px;padding-top:12px;}
+.summary-row.total .label,.summary-row.total .val{font-size:16px;font-weight:700;color:#1c1c1c;}
+.btn-checkout{display:block;width:100%;padding:12px;background:#00b517;color:#fff;border:none;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;margin-top:16px;text-align:center;}
+.btn-checkout:hover{background:#00a015;}
+.payment-icons{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;}
+.payment-icons img{height:24px;}
+/* Features */
+.features{display:flex;gap:24px;margin-top:32px;padding:0 0 32px;}
+.feature{display:flex;align-items:flex-start;gap:12px;}
+.feature-icon{width:48px;height:48px;border-radius:50%;background:#f0f1f3;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.feature-icon svg{width:22px;height:22px;color:#6b7280;}
+.feature h4{font-size:14px;font-weight:500;color:#1c1c1c;}
+.feature p{font-size:13px;color:#9ca3af;}
+/* Saved for later */
+.saved-section{margin-top:16px;}
+.saved-section h3{font-size:18px;font-weight:700;margin-bottom:16px;}
+.saved-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+.saved-card{background:#fff;border:1px solid #e4e7eb;border-radius:8px;overflow:hidden;}
+.saved-card-img{height:200px;display:flex;align-items:center;justify-content:center;padding:16px;background:#fff;}
+.saved-card-img img{max-height:100%;object-fit:contain;}
+.saved-card-info{padding:12px 16px;}
+.saved-card-price{font-size:16px;font-weight:600;color:#1c1c1c;}
+.saved-card-title{font-size:13px;color:#6b7280;margin-top:4px;line-height:1.4;}
+.btn-move-cart{display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:6px 14px;border:1px solid #e4e7eb;border-radius:6px;background:#fff;color:#127fff;font-size:13px;font-weight:500;cursor:pointer;}
+.btn-move-cart:hover{background:#f0f5ff;}
+.btn-move-cart svg{width:16px;height:16px;}
+/* Discount Banner */
+.discount-banner{margin-top:40px;background:linear-gradient(135deg,#127fff,#4da3ff);border-radius:12px;padding:32px 40px;display:flex;align-items:center;justify-content:space-between;color:#fff;}
+.discount-banner h3{font-size:20px;font-weight:600;}
+.discount-banner p{font-size:14px;opacity:.85;margin-top:4px;}
+.btn-shop-now{padding:10px 24px;background:rgba(255,102,0,0.9);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;}
+.btn-shop-now:hover{background:rgba(255,102,0,1);}
+/* ===== FOOTER ===== */
+.footer{background:#fff;border-top:1px solid #e4e7eb;margin-top:40px;}
+.footer-inner{max-width:1200px;margin:0 auto;padding:40px 16px;display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr 1fr 1fr;gap:32px;}
+.footer-brand .logo{margin-bottom:12px;}
+.footer-brand p{font-size:12px;color:#6b7280;line-height:1.6;}
+.social-icons{display:flex;gap:8px;margin-top:12px;}
+.social-icon{width:32px;height:32px;border-radius:50%;background:#e5e7eb;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s;}
+.social-icon:hover{background:#127fff;}
+.social-icon:hover svg{fill:#fff;}
+.social-icon svg{width:16px;height:16px;fill:#6b7280;}
+.footer-col h4{font-size:14px;font-weight:600;color:#1c1c1c;margin-bottom:12px;}
+.footer-col ul li{padding:3px 0;}
+.footer-col ul li a{font-size:14px;color:#6b7280;cursor:pointer;}
+.footer-col ul li a:hover{color:#127fff;}
+.app-badges{display:flex;flex-direction:column;gap:8px;}
+.app-badge{height:40px;cursor:pointer;transition:opacity .2s;}
+.app-badge:hover{opacity:.8;}
+.footer-bottom{background:#f0f1f3;border-top:1px solid #e4e7eb;}
+.footer-bottom-inner{max-width:1200px;margin:0 auto;padding:16px;display:flex;align-items:center;justify-content:space-between;font-size:14px;color:#6b7280;}
+.lang-selector{display:flex;align-items:center;gap:6px;cursor:pointer;}
+.lang-selector img{width:22px;height:16px;border-radius:2px;}
+.social-icon svg{
+  width:20px;
+  height:20px;
+  stroke:#dee0e3;
+  transition:0.2s;
+}
+
+.social-icon:hover svg{
+  stroke:#127fff;
+}
+/* ===== RESPONSIVE ===== */
+@media(max-width:992px){
+  .cart-layout{flex-direction:column;}
+  .cart-right{width:100%;}
+  .saved-grid{grid-template-columns:repeat(2,1fr);}
+  .footer-inner{grid-template-columns:repeat(3,1fr);}
+  .features{flex-wrap:wrap;}
+}
+@media(max-width:640px){
+  .header-inner{flex-wrap:wrap;gap:12px;}
+  .saved-grid{grid-template-columns:repeat(1,1fr);}
+  .footer-inner{grid-template-columns:1fr 1fr;}
+  .discount-banner{flex-direction:column;text-align:center;gap:16px;}
+  .features{flex-direction:column;}
+  .cart-item{flex-wrap:wrap;}
+  .cart-item-right{flex-direction:row;align-items:center;width:100%;justify-content:space-between;margin-top:8px;}
+}
+</style>
+</head>
+<body>
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <a href="#" class="logo">
+      <div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM9 8V6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9z"/></svg></div>
+      <span class="logo-text">Brand</span>
+    </a>
+    <div class="header-icons">
+      <button class="header-icon-btn" onclick="alert('Profile clicked')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>Profile</span>
+      </button>
+      <button class="header-icon-btn" onclick="alert('Messages clicked')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <span>Message</span>
+      </button>
+      <button class="header-icon-btn" onclick="alert('Orders clicked')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <span>Orders</span>
+      </button>
+      <button class="header-icon-btn" onclick="alert('Cart clicked')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <span>My cart</span>
+      </button>
+    </div>
+  </div>
+</header>
+<!-- MAIN -->
+<main class="main">
+  <h1 class="page-title">My cart (<span id="cart-count">3</span>)</h1>
+  <div class="cart-layout">
+    <div class="cart-left">
+      <div class="cart-items" id="cart-items"></div>
+      <div class="cart-bottom-actions">
+        <button class="btn-back" onclick="alert('Back to shop!')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Back to shop</button>
+        <button class="btn-remove-all" onclick="removeAll()">Remove all</button>
+      </div>
+    </div>
+    <div class="cart-right">
+      <div class="coupon-box">
+        <h4>Have a coupon?</h4>
+        <div class="coupon-form">
+          <input type="text" placeholder="Add coupon" id="coupon-input">
+          <button onclick="applyCoupon()">Apply</button>
+        </div>
+      </div>
+      <div class="summary-box" id="summary-box"></div>
+    </div>
+  </div>
+  <!-- Features -->
+  <div class="features">
+    <div class="feature">
+      <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+      <div><h4>Secure payment</h4><p>Have you ever finally just</p></div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+      <div><h4>Customer support</h4><p>Have you ever finally just</p></div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
+      <div><h4>Free delivery</h4><p>Have you ever finally just</p></div>
+    </div>
+  </div>
+  <!-- Saved for later -->
+  <div class="saved-section">
+    <h3>Saved for later</h3>
+    <div class="saved-grid" id="saved-grid"></div>
+  </div>
+  <!-- Discount Banner -->
+  <div class="discount-banner">
+    <div>
+      <h3>Super discount on more than 100 USD</h3>
+      <p>Have you ever finally just write dummy info</p>
+    </div>
+    <button class="btn-shop-now" onclick="alert('Shop now!')">Shop now</button>
+  </div>
+</main>
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="#" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="#fff"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM9 8V6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9z"/></svg></div>
+        <span class="logo-text">Brand</span>
+      </a>
+      <p>Best information about the company gies here but now lorem ipsum is</p>
+      <div class="social-icons">
+        <a href="#" class="social-icon"><svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+        <a href="#" class="social-icon"><svg viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg></a>
+        <a href="#" class="social-icon"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+   <a href="#" class="social-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+    <circle cx="12" cy="12" r="4"/>
+    <circle cx="17" cy="7" r="1"/>
+  </svg>
+</a>
+<a href="#" class="social-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <rect x="2" y="6" width="20" height="12" rx="3"/>
+    <polygon points="10 9 16 12 10 15 10 9"/>
+  </svg>
+</a>
+      </div>
+    </div>
+    <div class="footer-col"><h4>About</h4><ul><li><a href="#">About Us</a></li><li><a href="#">Find store</a></li><li><a href="#">Categories</a></li><li><a href="#">Blogs</a></li></ul></div>
+    <div class="footer-col"><h4>Partnership</h4><ul><li><a href="#">About Us</a></li><li><a href="#">Find store</a></li><li><a href="#">Categories</a></li><li><a href="#">Blogs</a></li></ul></div>
+    <div class="footer-col"><h4>Information</h4><ul><li><a href="#">Help Center</a></li><li><a href="#">Money Refund</a></li><li><a href="#">Shipping</a></li><li><a href="#">Contact us</a></li></ul></div>
+    <div class="footer-col"><h4>For users</h4><ul><li><a href="#">Login</a></li><li><a href="#">Register</a></li><li><a href="#">Settings</a></li><li><a href="#">My Orders</a></li></ul></div>
+    <div class="footer-col">
+      <h4>Get app</h4>
+      <div class="app-badges">
+        <a href="#"><img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="App Store" class="app-badge"></a>
+        <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play" class="app-badge"></a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-bottom-inner">
+      <span>&copy; 2023 Ecommerce.</span>
+      <span class="lang-selector"><img src="https://flagcdn.com/w40/us.png" alt="US"> English &#9650;</span>
+    </div>
+  </div>
+</footer>
+<script>
+// Cart data
+let cartItems = [
+  {id:1,title:"T-shirts with multiple colors, for men and lady",size:"medium",color:"blue",material:"Plastic",seller:"Artel Market",price:78.99,qty:9,img:"images/shirt.png"},
+  {id:2,title:"T-shirts with multiple colors, for men and lady",size:"medium",color:"blue",material:"Plastic",seller:"Best factory LLC",price:39.00,qty:3,img:"images/bag.png"},
+  {id:3,title:"T-shirts with multiple colors, for men and lady",size:"medium",color:"blue",material:"Plastic",seller:"Artel Market",price:170.50,qty:1,img:"images/lamp.png"}
+];
+let savedItems = [
+  {id:10,title:"GoPro HERO6 4K Action Camera - Black",price:99.50,img:"images/tab.png"},
+  {id:11,title:"GoPro HERO6 4K Action Camera - Black",price:99.50,img:"images/mob.png"},
+  {id:12,title:"GoPro HERO6 4K Action Camera - Black",price:99.50,img:"images/watch.png"},
+  {id:13,title:"GoPro HERO6 4K Action Camera - Black",price:99.50,img:"images/laptop.png"}
+];
+let discount = 60;
+let taxRate = 0.01;
+function renderCart() {
+  const container = document.getElementById('cart-items');
+  container.innerHTML = cartItems.map(item => `
+    <div class="cart-item" data-id="${item.id}">
+      <div class="cart-item-img"><img src="${item.img}" alt="${item.title}"></div>
+      <div class="cart-item-details">
+        <div class="cart-item-title">${item.title}</div>
+        <div class="cart-item-meta">Size: ${item.size}, Color: ${item.color}, Material: ${item.material}</div>
+        <div class="cart-item-meta">Seller: ${item.seller}</div>
+        <div class="cart-item-actions">
+          <button class="btn-remove" onclick="removeItem(${item.id})">Remove</button>
+          <button class="btn-save" onclick="saveForLater(${item.id})">Save for later</button>
+        </div>
+      </div>
+      <div class="cart-item-right">
+        <div class="cart-item-price">$${item.price.toFixed(2)}</div>
+        <select class="qty-select" onchange="updateQty(${item.id}, this.value)">
+          ${[1,2,3,4,5,6,7,8,9,10].map(n => `<option value="${n}" ${n===item.qty?'selected':''}>Qty: ${n}</option>`).join('')}
+        </select>
+      </div>
+    </div>
+  `).join('');
+  document.getElementById('cart-count').textContent = cartItems.length;
+  renderSummary();
+}
+function renderSummary() {
+  const subtotal = cartItems.reduce((s,i) => s + i.price * i.qty, 0);
+  const tax = subtotal * taxRate;
+  const total = subtotal - discount + tax;
+  document.getElementById('summary-box').innerHTML = `
+    <div class="summary-row"><span class="label">Subtotal:</span><span class="val">$${subtotal.toFixed(2)}</span></div>
+    <div class="summary-row discount"><span class="label">Discount:</span><span class="val">- $${discount.toFixed(2)}</span></div>
+    <div class="summary-row tax"><span class="label">Tax:</span><span class="val">+ $${tax.toFixed(2)}</span></div>
+    <div class="summary-row total"><span class="label">Total:</span><span class="val">$${total.toFixed(2)}</span></div>
+    <button class="btn-checkout" onclick="alert('Proceeding to checkout!')">Checkout</button>
+    <div class="payment-icons">
+      <img src="https://img.icons8.com/color/48/amex.png" alt="Amex" height="24">
+      <img src="https://img.icons8.com/color/48/mastercard.png" alt="Mastercard" height="24">
+      <img src="https://img.icons8.com/color/48/paypal.png" alt="PayPal" height="24">
+      <img src="https://img.icons8.com/color/48/visa.png" alt="Visa" height="24">
+      <img src="https://img.icons8.com/ios-filled/50/apple-pay.png" alt="Apple Pay" height="24">
+    </div>
+  `;
+}
+function removeItem(id) {
+  cartItems = cartItems.filter(i => i.id !== id);
+  renderCart();
+}
+function saveForLater(id) {
+  const item = cartItems.find(i => i.id === id);
+  if (item) {
+    savedItems.push({id: Date.now(), title: item.title, price: item.price, img: item.img});
+    cartItems = cartItems.filter(i => i.id !== id);
+    renderCart();
+    renderSaved();
+  }
+}
+function updateQty(id, qty) {
+  const item = cartItems.find(i => i.id === id);
+  if (item) { item.qty = parseInt(qty); renderSummary(); }
+}
+function removeAll() {
+  if (confirm('Remove all items from cart?')) { cartItems = []; renderCart(); }
+}
+function applyCoupon() {
+  const code = document.getElementById('coupon-input').value.trim();
+  if (code) { alert(`Coupon "${code}" applied!`); discount += 10; renderSummary(); }
+}
+function renderSaved() {
+  document.getElementById('saved-grid').innerHTML = savedItems.map(item => `
+    <div class="saved-card">
+      <div class="saved-card-img"><img src="${item.img}" alt="${item.title}"></div>
+      <div class="saved-card-info">
+        <div class="saved-card-price">$${item.price.toFixed(2)}</div>
+        <div class="saved-card-title">${item.title}</div>
+        <button class="btn-move-cart" onclick="moveToCart(${item.id})">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          Move to cart
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+function moveToCart(id) {
+  const item = savedItems.find(i => i.id === id);
+  if (item) {
+    cartItems.push({id: Date.now(), title: item.title, size:"medium", color:"blue", material:"Plastic", seller:"Artel Market", price: item.price, qty:1, img: item.img});
+    savedItems = savedItems.filter(i => i.id !== id);
+    renderCart();
+    renderSaved();
+  }
+}
+// Init
+renderCart();
+renderSaved();
+</script>
+</body>
+</html>
